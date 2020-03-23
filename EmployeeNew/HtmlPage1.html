@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+ <title></title>
+ <meta charset="utf-8" />
+ <script src="Scripts/jquery-1.10.2.js"></script>
+
+</head>
+<body>
+  <div>
+    Username : <input type="text" id="txtUsername"/>
+    Password : <input type="password" id="txtPassword"/>
+   <br /><br />
+   <button id="btnShow">Add Employees</button>
+   <button id="btnHide">Clear</button>
+   <ul id="employeeList"></ul>
+  </div>
+
+
+
+
+ <script type="text/javascript">
+  $(document).ready(function () {
+   var empList = $("#employeeList");
+
+   $("#btnShow").click(function () {
+    $.ajax({
+     type : 'GET',
+     url: "http://localhost:41796/api/EmployeeDetail/LoadEmployees",
+     dataType: 'json',
+     success : function(data){
+      empList.empty();
+      $.each(data, function (index, val) {
+       var fullName = val.firstName + ' ' + val.lastName;
+       empList.append(`<li> ${fullName} </li>`);
+      })
+      console.log("hello world")
+    }
+
+    })
+   })
+   $("#btnHide").click(function () {
+    empList.empty();
+   })
+  })
+
+
+
+ </script>
+
+</body>
+</html>
+ 

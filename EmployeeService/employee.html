@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+ <meta charset="utf-8" />
+ <script src="Scripts/jquery-1.10.2.js"></script>
+
+</head>
+<body>
+ <div>
+  Username : <input type="text" id="txtUsername" />
+  Password : <input type="text" id="txtPassword" />
+  <br /><br />
+  <button id="btnShow">Add Employees</button>
+  <button id="btnHide">Clear</button>
+  <ul id="employeeList"></ul>
+ </div>
+
+
+ <script type="text/javascript">
+  $(document).ready(function () {
+   var empList = $("#employeeList");
+
+   $("#btnShow").click(function () {
+
+    var userName = $('#txtUsername').val();
+    var password = $('#txtPassword').val();
+    console.log(userName, password, "***")
+    $.ajax({
+     type : 'GET',
+     url: "api/EmployeeDetail/LoadEmployees",
+     dataType: 'json',
+     headers : {
+      'Authorization' : 'Basic ' + btoa(userName + ':' + password) 
+     },
+     success : function(data){
+      empList.empty();
+      $.each(data, function (index, val) {
+       var fullName = val.firstName + ' ' + val.lastName;
+       empList.append(`<li>  ${fullName} :  ${val.Gender} </li>`);
+      })
+      console.log("hello world")
+     },
+
+     complete: function (jqXHR) {
+      if (jqXHR.status == '500') {
+       empList.empty();
+       empList.append(`<li> ${jqXHR.status} : ${jqXHR.statusText} </li>`)
+      }
+     }
+
+    })
+   })
+   $("#btnHide").click(function () {
+    empList.empty();
+   })
+  })
+
+
+
+ </script>
+
+</body>
+</html>
